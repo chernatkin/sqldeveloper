@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".SQLActivity" >
+
+    <TabHost android:id="@+id/sql_tabs"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content">
+	    <LinearLayout
+	        android:orientation="vertical"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content">
+	        <TabWidget android:id="@android:id/tabs"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+	        
+	        <FrameLayout android:id="@android:id/tabcontent" 
+	            		android:layout_width="wrap_content" 
+	            		android:layout_height="wrap_content">
+	        
+	        <RelativeLayout android:id="@+id/sql_worksheet"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content">
+	            
+	            <LinearLayout android:id="@+id/run_buttons"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:orientation="horizontal">
+			        
+			        <Button
+			       	    android:id="@+id/run_all_button"
+			       	    android:layout_height="wrap_content"
+			     		android:layout_width="wrap_content"
+			     		android:text="@string/run_all"
+			     		android:onClick="runAll"/>
+			    </LinearLayout>
+			    
+			    <EditText android:id="@+id/edit_sql"
+			       	    android:layout_width="match_parent"
+			       	    android:layout_height="wrap_content"
+			       	    android:layout_below="@id/run_buttons"
+			       	    android:inputType="textMultiLine"
+			       	    android:maxLength="1024"/>
+			    
+			    <TextView android:id="@+id/result_msg"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:maxLength="1024"
+			        android:layout_below="@id/edit_sql"
+			        android:inputType="none"
+			        android:text="@string/no_result"/>
+			
+			    <TableLayout android:id="@+id/result_table"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_below="@id/edit_sql"
+			        android:background="#000000"
+			        android:visibility="invisible">
+			    </TableLayout>
+	        </RelativeLayout>
+	        </FrameLayout>
+	    </LinearLayout>
+	</TabHost>
+    
+</RelativeLayout>

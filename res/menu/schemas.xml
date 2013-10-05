@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item android:id="@+id/add_schema_item"
+	        android:orderInCategory="100"
+	        android:showAsAction="never"
+	        android:title="@string/add_new_scheme_option"/>
+    
+</menu>
