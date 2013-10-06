@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -47,6 +46,8 @@ public class FilesActivity extends Activity {
 	
 	private File currentDir;
 	
+	private ArrayAdapter<String> filesList;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,6 +59,37 @@ public class FilesActivity extends Activity {
 		final String initPath = intent.getStringExtra(FILES_INITIAL_PATH);
 		final String initFileName = intent.getStringExtra(FILES_INITIAL_FILE_NAME);
 		sqlForSaving = intent.getStringExtra(FILES_SQL_TO_SAVE);
+		
+		final ListView listView = (ListView)findViewById(R.id.files_list);
+		filesList = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, android.R.id.text1, new ArrayList<String>());
+		listView.setAdapter(filesList);
+		
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View item, int position, long id) {
+				final String fileName = ((TextView)item).getText().toString();
+				final File file = getChildFile(fileName);
+				
+				if(file.isDirectory()){
+					openDir(file);
+				}
+				else if(action.equals(FILES_ACTION_LOAD)){
+					if(file.length() > 1024){
+						buildFailDialog("Too large", "File size should be less than 1024 bytes").show();
+						return;
+					}
+					buildQuestionDialog("SQL import", "File \"" + file.getName() + "\" will be imported", new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							final Intent sqlIntent = new Intent("");
+							sqlIntent.putExtra(SQLActivity.LOADED_SQL_PARAM_NAME, readTextFromFile(file));
+							setResult(RESULT_OK, sqlIntent);
+							FilesActivity.this.finish();
+						}
+					}).show();
+				}
+			}
+		});
 		
 		final Button button = (Button)findViewById(R.id.file_action_button);
 		final EditText fileNameView = (EditText)findViewById(R.id.new_file_name);
@@ -96,9 +128,8 @@ public class FilesActivity extends Activity {
 			currentDir = file;
 		}
 		
-		final ListView listView = (ListView)findViewById(R.id.files_list);
+		filesList.clear();
 		
-		final List<String> filesList = new ArrayList<String>();
 		if(!ROOT_PATH.equals(currentDir.getAbsolutePath())){
 			filesList.add(PARENT_DIR_ALIAS);
 		}
@@ -107,34 +138,7 @@ public class FilesActivity extends Activity {
 			filesList.addAll(Arrays.asList(childFiles));
 		}
 		
-		listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, android.R.id.text1, filesList));
-		
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View item, int position, long id) {
-				final String fileName = ((TextView)item).getText().toString();
-				final File file = getChildFile(fileName);
-				
-				if(file.isDirectory()){
-					openDir(file);
-				}
-				else if(action.equals(FILES_ACTION_LOAD)){
-					if(file.length() > 1024){
-						buildFailDialog("Too large", "File size should be less than 1024 bytes").show();
-						return;
-					}
-					buildQuestionDialog("SQL import", "File \"" + file.getName() + "\" will be imported", new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							final Intent sqlIntent = new Intent("");
-							sqlIntent.putExtra(SQLActivity.LOADED_SQL_PARAM_NAME, readTextFromFile(file));
-							setResult(RESULT_OK, sqlIntent);
-							FilesActivity.this.finish();
-						}
-					}).show();
-				}
-			}
-		});
+		filesList.notifyDataSetChanged();
 		
 		final String path = currentDir.getAbsolutePath().substring(ROOT_PATH.length());
 		final TextView currentPath = (TextView)findViewById(R.id.current_files_path);

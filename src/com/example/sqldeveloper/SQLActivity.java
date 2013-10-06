@@ -180,7 +180,6 @@ public class SQLActivity extends Activity {
 		}
 		
 		editor.putInt(makeKey(STATE_TAB_COUNTER), tabCounter.get());
-		
 		editor.commit();
 		
 		super.onDestroy();

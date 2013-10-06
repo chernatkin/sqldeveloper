@@ -26,8 +26,10 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -44,7 +46,7 @@ public class SQLFragment extends Fragment {
 	
 	private String schema;
 	
-	private RelativeLayout tabContent;
+	private ScrollView scroll;
 	
 	private EditText sqlArea;
 	
@@ -74,13 +76,19 @@ public class SQLFragment extends Fragment {
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		if(tabContent != null) { return tabContent; }
+		if(scroll != null) { return scroll; }
 		
 		parseSavedState(savedInstanceState);
 		
 		final Context context = inflater.getContext();
-		tabContent = new RelativeLayout(context);
+		scroll = new ScrollView(context);
+		
+		final HorizontalScrollView horizontalScroll = new HorizontalScrollView(context);
+		scroll.addView(horizontalScroll);
+		
+		final RelativeLayout tabContent = new RelativeLayout(context);
 		tabContent.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+		horizontalScroll.addView(tabContent);
 		
 		final LinearLayout runButtons = new LinearLayout(context); 
 		final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -228,7 +236,7 @@ public class SQLFragment extends Fragment {
 			}
 		});
 		
-		return tabContent;
+		return scroll;
     }
 	
 	private List<String> splitQueries(final String script){
