@@ -10,6 +10,7 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import com.example.sqldeveloper.dialects.SQLDialect;
 import com.example.sqldeveloper.dialects.SQLDialectManager;
 import com.example.sqldeveloper.dialects.StatementBuilder;
+import com.example.sqldeveloper.utils.DialogUtils;
 import com.example.sqldeveloper.utils.NamesValidatior;
 
 public class SchemasActivity extends FragmentActivity implements ActionBar.OnNavigationListener {
@@ -51,6 +53,17 @@ public class SchemasActivity extends FragmentActivity implements ActionBar.OnNav
 		actionBar.setListNavigationCallbacks(new ArrayAdapter<String>(actionBar.getThemedContext(),
 										android.R.layout.simple_list_item_1,
 										android.R.id.text1, titles), this);
+		
+		final String state = Environment.getExternalStorageState();
+	    if (!Environment.MEDIA_MOUNTED.equals(state)) {
+	    	DialogUtils.buildMessageDialog(this, "External storage not found", "External storage (SD card usually) must be mounted on device", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					SchemasActivity.this.finish();
+				}
+			}).show();
+	    }
 	}
 
 	@Override
@@ -149,5 +162,17 @@ public class SchemasActivity extends FragmentActivity implements ActionBar.OnNav
 		args.putInt(SchemasSectionFragment.SQL_DIALECT_INDEX, getActionBar().getSelectedNavigationIndex());
 		fragment.setArguments(args);
 		getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+	}
+
+	@Override
+	public void onBackPressed() {
+		DialogUtils.buildQuestionDialog(this, "Quit", "Are you want to quit?", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				SchemasActivity.this.finish();
+				return;
+			}
+		}).show();
 	}
 }

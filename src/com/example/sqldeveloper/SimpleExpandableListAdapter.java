@@ -33,7 +33,7 @@ public class SimpleExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		final TextView view = new TextView(context);
-		view.setPadding(40, 0, 0, 0);
+		view.setPadding(50, 0, 0, 0);
 		view.setText(getChild(groupPosition, childPosition).toString());
 		return view;
 	}

@@ -52,7 +52,6 @@ public class SQLDialectManager {
 			if(transformer == null){ return null; }
 			return transformer.transformResultSet(resultSet, hasResultSet);
 		}catch(SQLException sqle){
-			sqle.printStackTrace();
 			throw sqle;
 		}
 		finally{
@@ -78,7 +77,6 @@ public class SQLDialectManager {
 			conn.createStatement().execute("SET INITIAL SCHEMA " + schema + ';');
 			return execBuilder.excecute(conn);
 		}catch(SQLException sqle){
-			sqle.printStackTrace();
 			throw sqle;
 		}
 		finally{

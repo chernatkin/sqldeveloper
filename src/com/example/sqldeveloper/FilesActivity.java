@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.example.sqldeveloper.utils.DialogUtils;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface.OnClickListener;
@@ -75,10 +77,10 @@ public class FilesActivity extends Activity {
 				}
 				else if(action.equals(FILES_ACTION_LOAD)){
 					if(file.length() > 1024){
-						buildFailDialog("Too large", "File size should be less than 1024 bytes").show();
+						DialogUtils.buildMessageDialog(FilesActivity.this, "Too large", "File size should be less than 1024 bytes").show();
 						return;
 					}
-					buildQuestionDialog("SQL import", "File \"" + file.getName() + "\" will be imported", new OnClickListener() {
+					DialogUtils.buildQuestionDialog(FilesActivity.this, "SQL import", "File \"" + file.getName() + "\" will be imported", new OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							final Intent sqlIntent = new Intent("");
@@ -154,31 +156,6 @@ public class FilesActivity extends Activity {
 		}
 		
 		return new File(currentDir.getAbsolutePath() + File.separator + name);
-	}
-	
-	private AlertDialog buildFailDialog(final String title, final String text){
-		final TextView textView = new TextView(this);
-		textView.setPadding(10, 0, 10, 0);
-		textView.setText(text);
-		
-		return new AlertDialog.Builder(this)
-					.setTitle(title)
-					.setView(textView)
-					.setPositiveButton(R.string.ok, null)
-					.create();
-	}
-	
-	private AlertDialog buildQuestionDialog(final String title, final String text, final OnClickListener okListener){
-		final TextView textView = new TextView(this);
-		textView.setPadding(10, 0, 10, 0);
-		textView.setText(text);
-		
-		return new AlertDialog.Builder(this)
-					.setTitle(title)
-					.setView(textView)
-					.setPositiveButton(R.string.ok, okListener)
-					.setNegativeButton(R.string.cancel, null)
-					.create();
 	}
 	
 	private String readTextFromFile(final File file){

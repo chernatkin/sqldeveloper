@@ -89,7 +89,6 @@ public class SchemasSectionFragment extends Fragment {
 				}, null);
 				
 			}catch(SQLException sqle){
-				sqle.printStackTrace();
 			}
 
 			buildSchemasTree();
