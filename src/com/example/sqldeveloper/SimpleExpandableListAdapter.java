@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -32,8 +33,7 @@ public class SimpleExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-		final TextView view = new TextView(context);
-		view.setPadding(50, 0, 0, 0);
+		final TextView view = (TextView)((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.group_child_item, null);
 		view.setText(getChild(groupPosition, childPosition).toString());
 		return view;
 	}
@@ -60,8 +60,7 @@ public class SimpleExpandableListAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-		final TextView view = new TextView(context);
-		view.setPadding(30, 0, 0, 0);
+		final TextView view = (TextView)((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.group_expandable_item, null);
 		view.setText(getGroup(groupPosition).toString());
 		return view;
 	}

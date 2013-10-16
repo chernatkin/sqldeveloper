@@ -37,6 +37,20 @@ public class SchemasActivity extends FragmentActivity implements ActionBar.OnNav
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_schemas);
 
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			
+			@Override
+			public void uncaughtException(Thread thread, Throwable ex) {
+				DialogUtils.buildMessageDialog(SchemasActivity.this, "Internal error", ex.getMessage(), new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						SchemasActivity.this.finish();
+					}
+				});
+			}
+		});
+		
 		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(false);
