@@ -37,4 +37,6 @@ public abstract class SQLDialect {
 	public static String getApplicationRoot(){
 		return Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "sqldeveloper";
 	}
+	
+	public abstract BatchBuilder getDemoSchemaScript();
 }

@@ -1,5 +1,6 @@
 package com.example.sqldeveloper.dialects;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -44,9 +45,9 @@ public class SQLDialectManager {
 		PreparedStatement ps = null;
 		ResultSet resultSet = null;
 		try{
-			conn = DriverManager.getConnection("jdbc:hsqldb:file:" + dialect.getDbName(), dialect.getProps());
+			conn = createConnection(dialect);
 			ps = psBuilder.prepareStatement(conn);
-			final boolean hasResultSet =  ps.execute();
+			final boolean hasResultSet = ps.execute();
 			resultSet = ps.getResultSet();
 			
 			if(transformer == null){ return null; }
@@ -73,8 +74,8 @@ public class SQLDialectManager {
 		
 		Connection conn = null;
 		try{
-			conn = DriverManager.getConnection("jdbc:hsqldb:file:" + dialect.getDbName(), dialect.getProps());
-			conn.createStatement().execute("SET INITIAL SCHEMA " + schema + ';');
+			conn = createConnection(dialect);
+			if(schema != null) { conn.createStatement().execute("SET SCHEMA " + schema + ';'); }
 			return execBuilder.excecute(conn);
 		}catch(SQLException sqle){
 			throw sqle;
@@ -85,8 +86,46 @@ public class SQLDialectManager {
 					conn.close();
 				}
 			}catch(Throwable th){}
+		}	
+	}
+	
+	public static int[] executeBatch(final SQLDialect dialect, final String schema, final BatchBuilder execBuilder) throws SQLException{
+		
+		Connection conn = null;
+		try{
+			conn = createConnection(dialect);
+			if(schema != null) { conn.createStatement().execute("SET SCHEMA " + schema + ';'); }
+			return execBuilder.createBatch(conn).executeBatch();
+		}catch(SQLException sqle){
+			throw sqle;
+		}
+		finally{
+			try{
+				if(conn != null && !conn.isClosed()){
+					conn.close();
+				}
+			}catch(Throwable th){}
+		}	
+	}
+
+	private static Connection createConnection(final SQLDialect dialect) throws SQLException{
+		final File file = new File(dialect.getDbName() + ".script");
+		final boolean newDb = !file.exists();
+		
+		final Connection conn = DriverManager.getConnection("jdbc:hsqldb:file:" + dialect.getDbName() + ";shutdown=true", dialect.getProps());
+		conn.setAutoCommit(true);
+		conn.createStatement().execute("SET WRITE_DELAY FALSE");
+		
+		if(!newDb){ return conn; }
+		try{
+			conn.createStatement().execute("CREATE SCHEMA DEMO_SCHEMA AUTHORIZATION DBA;");
+			conn.createStatement().execute("SET SCHEMA DEMO_SCHEMA;");
+			dialect.getDemoSchemaScript().createBatch(conn).executeBatch();
+		}
+		catch(SQLException sqle) {
+			sqle.printStackTrace();
 		}
 		
+		return conn;
 	}
-		
 }

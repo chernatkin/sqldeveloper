@@ -36,20 +36,6 @@ public class SchemasActivity extends FragmentActivity implements ActionBar.OnNav
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_schemas);
-
-		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-			
-			@Override
-			public void uncaughtException(Thread thread, Throwable ex) {
-				DialogUtils.buildMessageDialog(SchemasActivity.this, "Internal error", ex.getMessage(), new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						SchemasActivity.this.finish();
-					}
-				});
-			}
-		});
 		
 		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
@@ -139,13 +125,7 @@ public class SchemasActivity extends FragmentActivity implements ActionBar.OnNav
 					
 					final SQLDialect dialect = SQLDialectManager.getAllDialects().get(lastSelectedDialect);
 					try {
-						SQLDialectManager.execute(dialect, new StatementBuilder() {
-							
-							@Override
-							public PreparedStatement prepareStatement(final Connection conn) throws SQLException {
-								return conn.prepareStatement("CREATE SCHEMA "+ schemaName.trim().toLowerCase(Locale.ENGLISH) +" AUTHORIZATION DBA");
-							}
-						}, null);
+						createSchema(schemaName, dialect);
 						dialog.dismiss();
 						refreshSchemasFragment();
 					} catch (SQLException e) {
@@ -188,5 +168,15 @@ public class SchemasActivity extends FragmentActivity implements ActionBar.OnNav
 				return;
 			}
 		}).show();
+	}
+	
+	private void createSchema(final String schemaName, final SQLDialect dialect) throws SQLException {
+		SQLDialectManager.execute(dialect, new StatementBuilder() {
+			
+			@Override
+			public PreparedStatement prepareStatement(final Connection conn) throws SQLException {
+				return conn.prepareStatement("CREATE SCHEMA "+ schemaName.trim().toLowerCase(Locale.ENGLISH) +" AUTHORIZATION DBA;");
+			}
+		}, null);
 	}
 }

@@ -197,7 +197,7 @@ public class SQLActivity extends Activity {
 			final String savedSchema = keys[1];
 			final String key = keys[2];
 			
-			if(titleId != dialect.getTitleId() && !schema.equals(savedSchema)){
+			if(titleId != dialect.getTitleId() || !schema.equals(savedSchema)){
 				continue;
 			}
 			if(key.equals(STATE_TAB_COUNTER)){
@@ -229,4 +229,12 @@ public class SQLActivity extends Activity {
 			getActionBar().setSelectedNavigationItem(tabNewIndex);
 		}
 	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		this.finish();
+	}
+	
+	
 }
