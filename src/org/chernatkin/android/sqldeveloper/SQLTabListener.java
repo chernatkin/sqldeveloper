@@ -1,6 +1,8 @@
-package com.example.sqldeveloper;
+package org.chernatkin.android.sqldeveloper;
 
-import com.example.sqldeveloper.utils.UniqueIdGenerator;
+import org.chernatkin.android.sqldeveloper.utils.UniqueIdGenerator;
+
+import org.chernatkin.android.sqldeveloper.R;
 
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;

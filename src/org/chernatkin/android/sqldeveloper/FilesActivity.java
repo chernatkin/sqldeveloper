@@ -1,4 +1,4 @@
-package com.example.sqldeveloper;
+package org.chernatkin.android.sqldeveloper;
 
 import java.io.File;
 import java.io.FileReader;
@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.example.sqldeveloper.utils.DialogUtils;
+import org.chernatkin.android.sqldeveloper.utils.DialogUtils;
+
+import org.chernatkin.android.sqldeveloper.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

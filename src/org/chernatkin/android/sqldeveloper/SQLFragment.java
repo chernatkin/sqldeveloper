@@ -1,4 +1,4 @@
-package com.example.sqldeveloper;
+package org.chernatkin.android.sqldeveloper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,10 +8,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.sqldeveloper.dialects.ExecutionBuilder;
-import com.example.sqldeveloper.dialects.SQLDialect;
-import com.example.sqldeveloper.dialects.SQLDialectManager;
-import com.example.sqldeveloper.utils.UniqueIdGenerator;
+import org.chernatkin.android.sqldeveloper.dialects.ExecutionBuilder;
+import org.chernatkin.android.sqldeveloper.dialects.SQLDialect;
+import org.chernatkin.android.sqldeveloper.dialects.SQLDialectManager;
+import org.chernatkin.android.sqldeveloper.utils.UniqueIdGenerator;
+
+import org.chernatkin.android.sqldeveloper.R;
 
 import android.app.Fragment;
 import android.content.Context;

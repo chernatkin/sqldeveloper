@@ -1,10 +1,16 @@
-package com.example.sqldeveloper;
+package org.chernatkin.android.sqldeveloper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
+
+import org.chernatkin.android.sqldeveloper.dialects.SQLDialect;
+import org.chernatkin.android.sqldeveloper.dialects.SQLDialectManager;
+import org.chernatkin.android.sqldeveloper.dialects.StatementBuilder;
+import org.chernatkin.android.sqldeveloper.utils.DialogUtils;
+import org.chernatkin.android.sqldeveloper.utils.NamesValidatior;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -20,11 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.sqldeveloper.dialects.SQLDialect;
-import com.example.sqldeveloper.dialects.SQLDialectManager;
-import com.example.sqldeveloper.dialects.StatementBuilder;
-import com.example.sqldeveloper.utils.DialogUtils;
-import com.example.sqldeveloper.utils.NamesValidatior;
+import org.chernatkin.android.sqldeveloper.R;
 
 public class SchemasActivity extends FragmentActivity implements ActionBar.OnNavigationListener {
 	

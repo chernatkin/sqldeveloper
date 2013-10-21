@@ -1,8 +1,8 @@
-package com.example.sqldeveloper.dialects;
+package org.chernatkin.android.sqldeveloper.dialects;
 
 import java.io.File;
 
-import com.example.sqldeveloper.R;
+import org.chernatkin.android.sqldeveloper.R;
 
 public class OracleDialect extends SQLDialect {
 

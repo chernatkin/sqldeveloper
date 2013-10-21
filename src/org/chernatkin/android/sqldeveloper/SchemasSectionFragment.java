@@ -1,4 +1,4 @@
-package com.example.sqldeveloper;
+package org.chernatkin.android.sqldeveloper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import org.chernatkin.android.sqldeveloper.dialects.ResultSetTransformer;
+import org.chernatkin.android.sqldeveloper.dialects.SQLDialect;
+import org.chernatkin.android.sqldeveloper.dialects.SQLDialectManager;
+import org.chernatkin.android.sqldeveloper.dialects.StatementBuilder;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,10 +28,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import android.widget.TextView;
 
-import com.example.sqldeveloper.dialects.ResultSetTransformer;
-import com.example.sqldeveloper.dialects.SQLDialect;
-import com.example.sqldeveloper.dialects.SQLDialectManager;
-import com.example.sqldeveloper.dialects.StatementBuilder;
+import org.chernatkin.android.sqldeveloper.R;
 
 public class SchemasSectionFragment extends Fragment {
 

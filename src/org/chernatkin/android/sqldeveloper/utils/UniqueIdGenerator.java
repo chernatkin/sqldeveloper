@@ -1,4 +1,4 @@
-package com.example.sqldeveloper.utils;
+package org.chernatkin.android.sqldeveloper.utils;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

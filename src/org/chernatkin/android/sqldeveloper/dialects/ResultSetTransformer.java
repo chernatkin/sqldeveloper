@@ -1,4 +1,4 @@
-package com.example.sqldeveloper.dialects;
+package org.chernatkin.android.sqldeveloper.dialects;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

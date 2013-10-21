@@ -1,6 +1,6 @@
-package com.example.sqldeveloper.utils;
+package org.chernatkin.android.sqldeveloper.utils;
 
-import com.example.sqldeveloper.R;
+import org.chernatkin.android.sqldeveloper.R;
 
 import android.app.AlertDialog;
 import android.content.Context;

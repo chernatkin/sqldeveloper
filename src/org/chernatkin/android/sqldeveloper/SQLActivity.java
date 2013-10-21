@@ -1,10 +1,14 @@
-package com.example.sqldeveloper;
+package org.chernatkin.android.sqldeveloper;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.chernatkin.android.sqldeveloper.dialects.SQLDialect;
+import org.chernatkin.android.sqldeveloper.dialects.SQLDialectManager;
+import org.chernatkin.android.sqldeveloper.utils.UniqueIdGenerator;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -20,9 +24,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.sqldeveloper.dialects.SQLDialect;
-import com.example.sqldeveloper.dialects.SQLDialectManager;
-import com.example.sqldeveloper.utils.UniqueIdGenerator;
+import org.chernatkin.android.sqldeveloper.R;
 
 public class SQLActivity extends Activity {
 

@@ -1,4 +1,4 @@
-package com.example.sqldeveloper.dialects;
+package org.chernatkin.android.sqldeveloper.dialects;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

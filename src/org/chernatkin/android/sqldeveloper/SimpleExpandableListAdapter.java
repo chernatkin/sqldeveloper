@@ -1,7 +1,9 @@
-package com.example.sqldeveloper;
+package org.chernatkin.android.sqldeveloper;
 
 import java.util.List;
 import java.util.Map;
+
+import org.chernatkin.android.sqldeveloper.R;
 
 import android.content.Context;
 import android.view.LayoutInflater;
