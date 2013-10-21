@@ -1,0 +1,1 @@
+keytool -genkey -v -keystore android.msqldeveloper.keystore -alias "msql_dev" -keyalg RSA -keysize 2048 -validity 12000

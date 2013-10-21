@@ -54,6 +54,7 @@ public class FilesActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_files);
+		getActionBar().hide();
 		
 		final Intent intent = getIntent();
 		action = intent.getStringExtra(FILES_ACTION_PARAM_NAME);
