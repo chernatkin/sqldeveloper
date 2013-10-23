@@ -6,6 +6,7 @@ import java.util.Map;
 import org.chernatkin.android.sqldeveloper.R;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +15,18 @@ import android.widget.TextView;
 
 public class SimpleExpandableListAdapter extends BaseExpandableListAdapter {
 
-	private final List<Map.Entry<String, List<String>>> tree;
+	private final Map<String, List<String>> tree;
 	
 	private final Context context;
 	
-	public SimpleExpandableListAdapter(final Context context, final List<Map.Entry<String, List<String>>> tree) {
+	public SimpleExpandableListAdapter(final Context context, final Map<String, List<String>> tree) {
 		this.tree = tree;
 		this.context = context;
 	}
 
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
-		return tree.get(groupPosition).getValue().get(childPosition);
+		return getByIndex(groupPosition).getValue().get(childPosition);
 	}
 
 	@Override
@@ -36,18 +37,18 @@ public class SimpleExpandableListAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		final TextView view = (TextView)((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.group_child_item, null);
-		view.setText(getChild(groupPosition, childPosition).toString());
+		view.setText(Html.fromHtml(getChild(groupPosition, childPosition).toString()));
 		return view;
 	}
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		return tree.get(groupPosition).getValue().size();
+		return getByIndex(groupPosition).getValue().size();
 	}
 
 	@Override
 	public Object getGroup(int groupPosition) {
-		return tree.get(groupPosition).getKey();
+		return getByIndex(groupPosition).getKey();
 	}
 
 	@Override
@@ -77,4 +78,12 @@ public class SimpleExpandableListAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 
+	protected Map.Entry<String, List<String>> getByIndex(final int index){
+		int i = 0;
+		for(Map.Entry<String, List<String>> entry : tree.entrySet()){
+			if(i == index){ return entry; }
+			i++;
+		}
+		return null;
+	}
 }

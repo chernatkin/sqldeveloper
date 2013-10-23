@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +27,6 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import android.widget.TextView;
-
-import org.chernatkin.android.sqldeveloper.R;
 
 public class SchemasSectionFragment extends Fragment {
 
@@ -82,7 +80,7 @@ public class SchemasSectionFragment extends Fragment {
 			
 			final SQLDialect selectedDialect = SQLDialectManager.getAllDialects().get(dialectPosition);
 			try{
-				SQLDialectManager.execute(selectedDialect, new StatementBuilder() {
+				SQLDialectManager.execute(selectedDialect, null, new StatementBuilder() {
 					
 					@Override
 					public PreparedStatement prepareStatement(final Connection conn) throws SQLException {
@@ -112,10 +110,10 @@ public class SchemasSectionFragment extends Fragment {
 		
 		final List<String> localSchemas = new ArrayList<String>();
 		try {
-			SQLDialectManager.execute(selectedDialect, new StatementBuilder() {
+			SQLDialectManager.execute(selectedDialect, "INFORMATION_SCHEMA", new StatementBuilder() {
 				@Override
 				public PreparedStatement prepareStatement(final Connection conn) throws SQLException{
-					return conn.prepareStatement("SELECT schema_name FROM information_schema.schemata WHERE schema_owner = 'DBA';");
+					return conn.prepareStatement("SELECT schema_name FROM schemata WHERE schema_owner = 'DBA';");
 				}
 			},
 			new ResultSetTransformer<List<String>>() {
@@ -131,20 +129,20 @@ public class SchemasSectionFragment extends Fragment {
 			e.printStackTrace();
 		}
 		
-		final Map.Entry<String, List<String>> localNode =  new AbstractMap.SimpleImmutableEntry<String, List<String>>(getString(R.string.local_schemas_title), localSchemas);
-		final List<Map.Entry<String, List<String>>> tree = Arrays.asList(localNode);
+		final Map<String, List<String>> tree = new LinkedHashMap<String, List<String>>();
+		tree.put(getString(R.string.local_schemas_title), localSchemas);
 		
 		final ExpandableListView treeView = (ExpandableListView) rootView.findViewById(R.id.schemas_tree);
-		treeView.setAdapter(new SimpleExpandableListAdapter(treeView.getContext(), tree));
+		treeView.setAdapter(new SimpleExpandableListAdapter(treeView.getContext(), Collections.unmodifiableMap(tree)));
 		treeView.expandGroup(0);
 		
 		treeView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 			
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-				final Intent sqlIntent = new Intent(parent.getContext(), SQLActivity.class);
-				sqlIntent.putExtra(SQLActivity.SCHEMA_PARAM_NAME, parent.getExpandableListAdapter().getChild(groupPosition, childPosition).toString());
-				sqlIntent.putExtra(SQLActivity.DIALECT_PARAM_NAME, selectedDialect.getTitleId());
+				final Intent sqlIntent = new Intent(parent.getContext(), SchemaObjectsActivity.class);
+				sqlIntent.putExtra(SchemaObjectsActivity.SCHEMA_PARAM_NAME, parent.getExpandableListAdapter().getChild(groupPosition, childPosition).toString());
+				sqlIntent.putExtra(SchemaObjectsActivity.DIALECT_PARAM_NAME, selectedDialect.getTitleId());
 				startActivity(sqlIntent);
 				return true;
 			}

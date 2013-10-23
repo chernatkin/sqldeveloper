@@ -14,15 +14,27 @@ public class OracleDialect extends SQLDialect {
 	@Override
 	public BatchBuilder getDemoSchemaScript() {
 	
-		return new BatchBuilderImpl("CREATE TABLE EMP " +
+		return new BatchBuilderImpl("CREATE TABLE DEPT " +
+			       "(DEPTNO NUMBER(2) PRIMARY KEY, " +
+				       "DNAME VARCHAR2(14), " +
+				       "LOC VARCHAR2(13));")
+				
+				.addQuery("INSERT INTO DEPT VALUES (10, 'ACCOUNTING', 'NEW YORK');")
+				.addQuery("INSERT INTO DEPT VALUES (20, 'RESEARCH',   'DALLAS');")
+				.addQuery("INSERT INTO DEPT VALUES (30, 'SALES',      'CHICAGO');")
+				.addQuery("INSERT INTO DEPT VALUES (40, 'OPERATIONS', 'BOSTON');")
+		
+				.addQuery("CREATE TABLE EMP " +
 			       "(EMPNO NUMBER(4) NOT NULL, " +
 			       "ENAME VARCHAR2(10), " +
 			       "JOB VARCHAR2(9), " +
 			       "MGR NUMBER(4), " +
 			       "HIREDATE DATE, " +
-			       "SAL NUMBER(7, 2), " +
+			       "SAL NUMBER(7, 2) DEFAULT 0 NOT NULL, " +
 			       "COMM NUMBER(7, 2), " +
-			       "DEPTNO NUMBER(2));")
+				   "DEPTNO NUMBER(2), " +
+				   "FOREIGN KEY (DEPTNO) REFERENCES DEPT(DEPTNO) ON DELETE CASCADE);")
+				
 				.addQuery("INSERT INTO EMP VALUES (7369, 'SMITH',  'CLERK',     7902, TO_DATE('17-DEC-1980', 'DD-MON-YYYY'),  800, NULL, 20);")
 				.addQuery("INSERT INTO EMP VALUES (7369, 'SMITH',  'CLERK',     7902, TO_DATE('17-DEC-1980', 'DD-MON-YYYY'),  800, NULL, 20);")
 				.addQuery("INSERT INTO EMP VALUES (7499, 'ALLEN',  'SALESMAN',  7698, TO_DATE('20-FEB-1981', 'DD-MON-YYYY'), 1600,  300, 30);")
@@ -37,18 +49,8 @@ public class OracleDialect extends SQLDialect {
 				.addQuery("INSERT INTO EMP VALUES (7876, 'ADAMS',  'CLERK',     7788, TO_DATE('12-JAN-1983', 'DD-MON-YYYY'), 1100, NULL, 20);")
 				.addQuery("INSERT INTO EMP VALUES (7900, 'JAMES',  'CLERK',     7698, TO_DATE('3-DEC-1981', 'DD-MON-YYYY'),   950, NULL, 30);")
 				.addQuery("INSERT INTO EMP VALUES (7902, 'FORD',   'ANALYST',   7566, TO_DATE('3-DEC-1981', 'DD-MON-YYYY'),  3000, NULL, 20);")
-				.addQuery("INSERT INTO EMP VALUES (7934, 'MILLER', 'CLERK',     7782, TO_DATE('23-JAN-1982', 'DD-MON-YYYY'), 1300, NULL, 10);")
+				.addQuery("INSERT INTO EMP VALUES (7934, 'MILLER', 'CLERK',     7782, TO_DATE('12-DEC-1983', 'DD-MON-YYYY'), 1300, NULL, 10);")
 				
-				.addQuery("CREATE TABLE DEPT " +
-					       "(DEPTNO NUMBER(2), " +
-					       "DNAME VARCHAR2(14), " +
-					       "LOC VARCHAR2(13));")
-	
-				.addQuery("INSERT INTO DEPT VALUES (10, 'ACCOUNTING', 'NEW YORK');")
-				.addQuery("INSERT INTO DEPT VALUES (20, 'RESEARCH',   'DALLAS');")
-				.addQuery("INSERT INTO DEPT VALUES (30, 'SALES',      'CHICAGO');")
-				.addQuery("INSERT INTO DEPT VALUES (40, 'OPERATIONS', 'BOSTON');")
-			
 				.addQuery("CREATE TABLE BONUS " +
 				        "(ENAME VARCHAR2(10), " + 
 				        "JOB   VARCHAR2(9), " +

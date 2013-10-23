@@ -173,7 +173,7 @@ public class SchemasActivity extends FragmentActivity implements ActionBar.OnNav
 	}
 	
 	private void createSchema(final String schemaName, final SQLDialect dialect) throws SQLException {
-		SQLDialectManager.execute(dialect, new StatementBuilder() {
+		SQLDialectManager.execute(dialect, null, new StatementBuilder() {
 			
 			@Override
 			public PreparedStatement prepareStatement(final Connection conn) throws SQLException {

@@ -11,10 +11,8 @@
     <string name="delete_all_sql_tab_option">Delete all sheets</string>
     <string name="save_sql_tab_option">Save sheet</string>
     <string name="load_sql_tab_option">Load sheet</string>
-    
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
-    
     <string name="add_new_scheme_option">Add new schema</string>
     <string name="delete_schema_option">Delete</string>
     <string name="context_menu_title">Schema options</string>
@@ -25,9 +23,6 @@
     <string name="title_mysql">MySQL</string>
     <string name="title_mssql">MS SQL</string>
     <string name="title_db2">DB2</string>
-    
-    
-	<string name="title_save_button">Save</string>
+    <string name="title_save_button">Save</string>
 
-	
 </resources>

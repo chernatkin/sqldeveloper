@@ -40,12 +40,13 @@ public class SQLDialectManager {
 		return null;
 	}
 	
-	public static <T> T execute(final SQLDialect dialect, final StatementBuilder psBuilder, final ResultSetTransformer<T> transformer) throws SQLException{
+	public static <T> T execute(final SQLDialect dialect, final String schema, final StatementBuilder psBuilder, final ResultSetTransformer<T> transformer) throws SQLException{
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet resultSet = null;
 		try{
 			conn = createConnection(dialect);
+			if(schema != null) { conn.createStatement().execute("SET SCHEMA " + schema + ';'); }
 			ps = psBuilder.prepareStatement(conn);
 			final boolean hasResultSet = ps.execute();
 			resultSet = ps.getResultSet();
