@@ -5,6 +5,7 @@ import org.chernatkin.android.sqldeveloper.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class DialogUtils {
@@ -18,9 +19,12 @@ public class DialogUtils {
 		textView.setPadding(10, 0, 10, 0);
 		textView.setText(text);
 		
+		final ScrollView scroll = new ScrollView(context);
+		scroll.addView(textView);
+		
 		return new AlertDialog.Builder(context)
 					.setTitle(title)
-					.setView(textView)
+					.setView(scroll)
 					.setPositiveButton(R.string.ok, okListener)
 					.create();
 	}

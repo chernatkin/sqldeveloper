@@ -9,13 +9,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.chernatkin.android.sqldeveloper.dialects.AbstractExpandableListProvider;
 import org.chernatkin.android.sqldeveloper.dialects.ExecutionBuilder;
-import org.chernatkin.android.sqldeveloper.dialects.ExpandableListProvider;
 import org.chernatkin.android.sqldeveloper.dialects.ResultSetTransformer;
 import org.chernatkin.android.sqldeveloper.dialects.SQLDialect;
 import org.chernatkin.android.sqldeveloper.dialects.SQLDialectManager;
 import org.chernatkin.android.sqldeveloper.dialects.StatementBuilder;
+import org.chernatkin.android.sqldeveloper.expandablelist.AbstractEventExpandableListProvider;
+import org.chernatkin.android.sqldeveloper.expandablelist.AbstractExpandableListProvider;
+import org.chernatkin.android.sqldeveloper.expandablelist.ExpandableListItem;
+import org.chernatkin.android.sqldeveloper.expandablelist.ExpandableListProvider;
+import org.chernatkin.android.sqldeveloper.utils.DialogUtils;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -24,6 +27,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 public class SchemaObjectsActivity extends Activity{
 	
@@ -101,6 +105,90 @@ public class SchemaObjectsActivity extends Activity{
 		}
 	};
 	
+	private final ExpandableListProvider viewsProvider = new AbstractEventExpandableListProvider() {
+		
+		@Override
+		protected Map<ExpandableListItem, List<ExpandableListItem>> createTree(final SQLDialect dialect, final String schema) throws SQLException {
+			
+			return SQLDialectManager.execute(dialect, "INFORMATION_SCHEMA", new ExecutionBuilder<Map<ExpandableListItem, List<ExpandableListItem>>>() {
+
+				@Override
+				public Map<ExpandableListItem, List<ExpandableListItem>> excecute(Connection conn) throws SQLException {
+					final ResultSet collsSet = conn.prepareStatement("SELECT cols.TABLE_NAME, cols.COLUMN_NAME, cols.DTD_IDENTIFIER, cols.IS_NULLABLE, cols.COLUMN_DEFAULT FROM COLUMNS cols "
+							+ "INNER JOIN VIEWS tbls ON cols.TABLE_SCHEMA = tbls.TABLE_SCHEMA AND cols.TABLE_NAME = tbls.TABLE_NAME "
+							+ "WHERE TABLE_SCHEMA = '" + schema.toUpperCase() + "' ORDER BY cols.TABLE_NAME, cols.COLUMN_NAME;").executeQuery();
+					
+					final Map<ExpandableListItem, List<ExpandableListItem>> tree = new LinkedHashMap<ExpandableListItem, List<ExpandableListItem>>();
+					
+					while(collsSet.next()){
+						
+						final ExpandableListItem tableItem = new ExpandableListItem(collsSet.getString("TABLE_NAME"));
+						List<ExpandableListItem> values = tree.get(tableItem);
+						if(values == null){
+							values = new ArrayList<ExpandableListItem>();
+							tree.put(tableItem, values);
+						}
+						
+						final String columnName = collsSet.getString("COLUMN_NAME");
+						final String columnType = collsSet.getString("DTD_IDENTIFIER");
+						final String nullable = collsSet.getString("IS_NULLABLE");
+						final Object defaultValue = collsSet.getObject("COLUMN_DEFAULT");
+						
+						final String columnDef = "<b>" + columnName + "</b>" 
+								+ "  <i>" + columnType.toLowerCase() 
+								+ ((nullable != null && nullable.equalsIgnoreCase("NO")) ? " not null" : "") 
+								+ (defaultValue != null ? "  default " + defaultValue : "")
+								+ "</i>";
+						
+						values.add(new ExpandableListItem(columnDef));
+					}
+					
+					for(final Map.Entry<ExpandableListItem, List<ExpandableListItem>> colDefs : tree.entrySet()){
+						final View.OnClickListener listener = new View.OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								try{
+									final String viewDef = SQLDialectManager.execute(dialect, "INFORMATION_SCHEMA", new StatementBuilder() {
+										
+										@Override
+										public PreparedStatement prepareStatement(Connection conn) throws SQLException {
+											return conn.prepareStatement("SELECT VIEW_DEFINITION FROM VIEWS WHERE TABLE_SCHEMA = '" + schema + "' AND TABLE_NAME = '" + colDefs.getKey().getText() + "'");
+										}
+									}, 
+									new ResultSetTransformer<String>() {
+	
+										@Override
+										public String transformResultSet(ResultSet result, boolean resultIsResultSet) throws SQLException {
+											result.next();
+											final String rawDef = result.getString("VIEW_DEFINITION");
+											return rawDef.replace("SELECT ", "\nSELECT\n")
+															.replace("FROM ", "\nFROM\n")
+															.replace("WHERE ", "\nWHERE\n")
+															.replace("GROUP BY ", "\nGROUP BY\n")
+															.replace("ORDER BY ", "\nORDER BY\n")
+															.replace("UNION ", "\nUNION\n")
+															.replace(",", ", ");
+										}
+										
+									});
+									
+									DialogUtils.buildMessageDialog(SchemaObjectsActivity.this, "View definition", viewDef).show();
+								}catch(SQLException sqle){
+									
+								}
+							}
+						};
+						
+						colDefs.getValue().add(new ExpandableListItem("<u><i>view definition</i></u>", listener));
+					}
+					
+					return tree;
+				}
+			});
+		}
+	};
+	
 	private String schema;
 	
 	private SQLDialect dialect;
@@ -118,6 +206,7 @@ public class SchemaObjectsActivity extends Activity{
 		actionBar.setDisplayShowTitleEnabled(false);
 		
 		addTab("Tables", tablesProvider);
+		addTab("Views", viewsProvider);
 		addSQLSheetTab();
 	}
 

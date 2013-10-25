@@ -1,11 +1,11 @@
-package org.chernatkin.android.sqldeveloper.dialects;
+package org.chernatkin.android.sqldeveloper.expandablelist;
 
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.chernatkin.android.sqldeveloper.SimpleExpandableListAdapter;
+import org.chernatkin.android.sqldeveloper.dialects.SQLDialect;
 
 import android.content.Context;
 import android.widget.ExpandableListAdapter;

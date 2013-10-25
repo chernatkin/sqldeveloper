@@ -14,6 +14,7 @@ import org.chernatkin.android.sqldeveloper.dialects.ResultSetTransformer;
 import org.chernatkin.android.sqldeveloper.dialects.SQLDialect;
 import org.chernatkin.android.sqldeveloper.dialects.SQLDialectManager;
 import org.chernatkin.android.sqldeveloper.dialects.StatementBuilder;
+import org.chernatkin.android.sqldeveloper.expandablelist.SimpleExpandableListAdapter;
 
 import android.content.Intent;
 import android.os.Bundle;

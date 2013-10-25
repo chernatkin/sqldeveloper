@@ -1,4 +1,6 @@
-package org.chernatkin.android.sqldeveloper.dialects;
+package org.chernatkin.android.sqldeveloper.expandablelist;
+
+import org.chernatkin.android.sqldeveloper.dialects.SQLDialect;
 
 import android.content.Context;
 import android.widget.ExpandableListAdapter;

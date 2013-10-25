@@ -1,7 +1,7 @@
 package org.chernatkin.android.sqldeveloper;
 
-import org.chernatkin.android.sqldeveloper.dialects.ExpandableListProvider;
 import org.chernatkin.android.sqldeveloper.dialects.SQLDialect;
+import org.chernatkin.android.sqldeveloper.expandablelist.ExpandableListProvider;
 
 import android.app.Fragment;
 import android.content.Context;

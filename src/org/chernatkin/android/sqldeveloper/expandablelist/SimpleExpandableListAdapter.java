@@ -1,9 +1,10 @@
-package org.chernatkin.android.sqldeveloper;
+package org.chernatkin.android.sqldeveloper.expandablelist;
 
 import java.util.List;
 import java.util.Map;
 
 import org.chernatkin.android.sqldeveloper.R;
+import org.chernatkin.android.sqldeveloper.R.layout;
 
 import android.content.Context;
 import android.text.Html;
